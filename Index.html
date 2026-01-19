@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis de Tendencias</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Bebas Neue', sans-serif;
+            background: #000;
+            color: #fff;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Efecto de difuminado circular en el centro */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, #2a2a2a 0%, #000 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Banner superior */
+        .banner {
+            background: #FFD700;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .banner h1 {
+            color: #000;
+            font-size: 2.5em;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        /* Contenedor de módulos */
+        .container {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        /* Módulos */
+        .module {
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 15px;
+            padding: 40px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Luz detrás de cada módulo */
+        .module::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.3), transparent);
+            transition: all 0.3s ease;
+            z-index: -1;
+            border-radius: 50%;
+        }
+
+        /* Efecto hover zoom con luz */
+        .module:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.5);
+        }
+
+        .module:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .module h2 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: #FFD700;
+        }
+
+        .module p {
+            font-size: 1.1em;
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        /* Modal para mostrar imágenes */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal.active {
+            display: block;
+        }
+
+        .modal-content {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 40px;
+            position: relative;
+        }
+
+        .close-btn {
+            position: fixed;
+            top: 20px;
+            right: 40px;
+            font-size: 40px;
+            color: #FFD700;
+            cursor: pointer;
+            z-index: 1001;
+            background: rgba(0, 0, 0, 0.8);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #FFD700;
+            transition: transform 0.3s ease;
+        }
+
+        .close-btn:hover {
+            transform: rotate(90deg);
+        }
+
+        .modal h2 {
+            color: #FFD700;
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .image-container {
+            margin-bottom: 40px;
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid #333;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+        }
+
+        .image-container p {
+            margin-top: 15px;
+            color: #ccc;
+            font-size: 1.1em;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Banner superior -->
+    <div class="banner">
+        <h1>Análisis de Tendencias Safety</h1>
+    </div>
+
+    <!-- Contenedor de módulos -->
+    <div class="container">
+        <!-- MÓDULO 1 -->
+        <div class="module" onclick="openModal('modal1')">
+            <h2>Tendencias Q1-FY26</h2>
+            <p>Haz click para ver el análisis de tendencias</p>
+        </div>
+
+        <!-- MÓDULO 2 -->
+        <div class="module" onclick="openModal('modal2')">
+            <h2>Tendencias Q2-FY26</h2>
+            <p>Haz click para ver el análisis de tendencias</p>
+        </div>
+
+        <!-- MÓDULO 3 -->
+        <div class="module" onclick="openModal('modal3')">
+            <h2>Tendencias Q3-FY26</h2>
+            <p>Haz click para ver el análisis de tendencias</p>
+        </div>
+
+        <!-- MÓDULO 4 -->
+        <div class="module" onclick="openModal('modal4')">
+            <h2>Tendencias Q4-FY26</h2>
+            <p>Haz click para ver el análisis de tendencias</p>
+        </div>
+    </div>
+
+    <!-- MODAL MÓDULO 1 -->
+    <div id="modal1" class="modal">
+        <span class="close-btn" onclick="closeModal('modal1')">&times;</span>
+        <div class="modal-content">
+            <h2>Tendencia Q1</h2>
+            
+            <div class="image-container">
+                <!-- REEMPLAZA 'URL_IMAGEN_1_MODULO_1' con la ruta de tu imagen -->
+                <img src="imagenes/BOSQ1.png" alt="Imagen 1">
+                <p>Analisis de Tendencia BOS</p>
+            </div>
+
+            <div class="image-container">
+                <!-- REEMPLAZA 'URL_IMAGEN_2_MODULO_1' con la ruta de tu imagen -->
+                <img src="imagenes/FACTUMQ1.jpeg" alt="Imagen 2">
+                <p>Analisis de Tendencia Factum</p>
+            </div>
+
+            <div class="image-container">
+                <!-- REEMPLAZA 'URL_IMAGEN_3_MODULO_1' con la ruta de tu imagen -->
+                <img src="imagenes/GEMBAQ1.jpeg" alt="Imagen 3">
+                <p>Analisis de Tendencia GEMBA</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL MÓDULO 2 -->
+    <div id="modal2" class="modal">
+        <span class="close-btn" onclick="closeModal('modal2')">&times;</span>
+        <div class="modal-content">
+            <h2>Tendencia Q2</h2>
+            
+            <div class="image-container">
+                <!-- REEMPLAZA 'URL_IMAGEN_1_MODULO_2' con la ruta de tu imagen -->
+                <img src="imagenes/BOSQ2.jpeg" alt="Imagen 1">
+                <p>Analisis de Tendencia BOS</p>
+            </div>
+
+            <div class="image-container">
+                <!-- REEMPLAZA 'URL_IMAGEN_2_MODULO_2' con la ruta de tu imagen -->
+                <img src="imagenes/FACTUMQ2.jpeg" alt="Imagen 2">
+                <p>Analisis de Tendencia Factum</p>
+            </div>
+
+            <div class="image-container">
+                <!-- REEMPLAZA 'URL_IMAGEN_3_MODULO_2' con la ruta de tu imagen -->
+                <img src="imagenes/GEMBAQ2.jpeg" alt="Imagen 3">
+                <p>Analisis de Tendencia GEMBA</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL MÓDULO 3 -->
+    <div id="modal3" class="modal">
+        <span class="close-btn" onclick="closeModal('modal3')">&times;</span>
+        <div class="modal-content">
+            <h2>Tendencia Q3</h2>
+            
+            <div class="image-container">
+                <!-- REEMPLAZA 'URL_IMAGEN_1_MODULO_3' con la ruta de tu imagen -->
+                <img src="URL_IMAGEN_1_MODULO_3" alt="Imagen 1">
+                <p>Analisis de Tendencia BOS</p>
+            </div>
+
+            <div class="image-container">
+                <!-- REEMPLAZA 'URL_IMAGEN_2_MODULO_3' con la ruta de tu imagen -->
+                <img src="URL_IMAGEN_2_MODULO_3" alt="Imagen 2">
+                <p>Analisis de Tendencia Factum</p>
+            </div>
+
+            <div class="image-container">
+                <!-- REEMPLAZA 'URL_IMAGEN_3_MODULO_3' con la ruta de tu imagen -->
+                <img src="URL_IMAGEN_3_MODULO_3" alt="Imagen 3">
+                <p>Analisis de Tendencia GEMBA</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL MÓDULO 4 -->
+    <div id="modal4" class="modal">
+        <span class="close-btn" onclick="closeModal('modal4')">&times;</span>
+        <div class="modal-content">
+            <h2>Tendencia Q4</h2>
+            
+            <div class="image-container">
+                <!-- REEMPLAZA 'URL_IMAGEN_1_MODULO_4' con la ruta de tu imagen -->
+                <img src="URL_IMAGEN_1_MODULO_4" alt="Imagen 1">
+                <p>Analisis de Tendencia BOS</p>
+            </div>
+
+            <div class="image-container">
+                <!-- REEMPLAZA 'URL_IMAGEN_2_MODULO_4' con la ruta de tu imagen -->
+                <img src="URL_IMAGEN_2_MODULO_4" alt="Imagen 2">
+                <p>Analisis de Tendencia Factum</p>
+            </div>
+
+            <div class="image-container">
+                <!-- REEMPLAZA 'URL_IMAGEN_3_MODULO_4' con la ruta de tu imagen -->
+                <img src="URL_IMAGEN_3_MODULO_4" alt="Imagen 3">
+                <p>Analisis de Tendencia GEMBA</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Cerrar modal al hacer click fuera del contenido
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
+    </script>
+</body>
+</html>
